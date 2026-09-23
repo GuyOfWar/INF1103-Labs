@@ -1,19 +1,16 @@
 inventory = int(0)
 taxtotal = 0.0
-error = 0
+error = int(0)
 def get_valid_input(stock): #Handles the prompt, handles input validation, returns a valid integer or a "quit" signal
-    entries= 0
     if stock == "quit":
         return("quit")
     if not stock.isdigit():
-        entries += 1
         print("Error, pls use whole numbers only")
-        return(entries)
+        return("error")
     stock = int(stock)
     if  stock < 0:
-        entries += 1
         print("Invalid Number, pls use whole numbers only")
-        return(entries)
+        return("error")
     return(stock)
 def process_delivery(current_total, new_value): #Calculates the new total and returns it
     current_total+= new_value
@@ -23,15 +20,19 @@ def calculate_tax(amount): #Takes a delivery amount and returns the tax (10% of 
     print("Tax amount for current stock:", tax)
     return(tax)
 def generate_report(total_units, failed_attempts): #print the final summary
-    print("Number of Failed/Rejected Entries:", failed_attempts)
     print("Total Number of Units Processed=", total_units)
+    print("Number of Failed/Rejected Entries:", failed_attempts)
 while inventory <= 500:
     prompt= get_valid_input(input("Enter Stock quantity:"))
     if prompt== "quit":
         generate_report(inventory, error)
+        taxtotal = round(taxtotal, 2)
         print("Total Tax Amount:", taxtotal)
         break
-    taxtotal+= round(calculate_tax(prompt), 2)
+    if prompt== "error":
+        error+=1
+        continue
+    taxtotal+= calculate_tax(prompt)
     inventory= process_delivery(inventory, prompt)
 if inventory > 500:
     print("Inventory Overloaded!!!")
