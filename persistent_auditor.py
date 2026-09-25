@@ -2,6 +2,16 @@ inventory = int(0)
 taxtotal = 0.0
 error = int(0)
 prompt = 0
+x = int(0)
+ProductName = 0
+order_number= ["1001", "1002", "1003", "1004"]
+order_list= ["Wireless Mouse", "Keyboard", "USB Cable", "Laptop Stand"]
+def load_inventory(): #load txt
+    print("Current Orders:\n")
+    with open("orders.txt", "r") as file:
+        print(file.read())
+def save_inventory(): #save to txt
+    file = open("orders.txt", "w")
 def get_valid_input(stock): #Handles the prompt, handles input validation, returns a valid integer or a "quit" signal
     if stock == "quit":
         return("quit")
@@ -16,22 +26,27 @@ def get_valid_input(stock): #Handles the prompt, handles input validation, retur
 def process_delivery(current_total, new_value): #Calculates the new total and returns it
     current_total+= new_value
     return(current_total)
-def calculate_tax(amount): #Takes a delivery amount and returns the tax (10% of that specific delivery)
-    tax= round(0.1*amount, 2)
-    print("Tax amount for current stock:", tax)
-    return(tax)
 def generate_report(total_units, failed_attempts): #print the final summary
     print("Total Number of Units Processed=", total_units)
     print("Number of Failed/Rejected Entries:", failed_attempts)
-while prompt!= "quit":
-    prompt= get_valid_input(input("Enter Stock quantity:"))
-    if prompt== "quit":
-        generate_report(inventory, error)
-        taxtotal = round(taxtotal, 2)
-        print("Total Tax Amount:", taxtotal)
-        break
-    if prompt== "error":
+
+#main
+print("Available Order List:")
+for x in range(4):
+    print(order_number[x], order_list[x])
+load_inventory()
+while ProductName!= "quit" and prompt!= "quit":
+    ProductName= input("Enter Product Name:").lower
+    if ProductName in (item.lower() for item in order_list):
+        prompt= get_valid_input(input("Enter Quantity:"))
+        if ProductName== "quit" or prompt== "quit":
+            generate_report(inventory, error)
+            break
+        if prompt== "error":
+            error+=1
+            continue
+        inventory= process_delivery(inventory, prompt)
+    else:
+        print("Invalid Name")
         error+=1
         continue
-    taxtotal+= calculate_tax(prompt)
-    inventory= process_delivery(inventory, prompt)
