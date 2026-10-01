@@ -9,6 +9,8 @@ order_list= ["Wireless Mouse", "Keyboard", "USB Cable", "Laptop Stand"]
 inventory_list=[]
 def load_inventory(): #load txt
     print("\nCurrent Orders:\n")
+    with open("orders.txt", "a"):
+        pass
     with open("orders.txt", "r") as file:
         print(file.read())
 def save_inventory(number, name, quantity): #save to txt
@@ -38,12 +40,17 @@ while True:
     ProductName= input("Enter Product Name:").lower()
     if ProductName== "quit":
         generate_report(inventory, error)
+        for order in inventory_list:
+            num, name, qty = order
+            save_inventory(num, name, qty)
         break
     if ProductName in (item.lower() for item in order_list):
         prompt= get_valid_input(input("Enter Quantity:"))
         if prompt== "quit":
             generate_report(inventory, error)
-            save_inventory(number, order_list[index], prompt)
+            for order in inventory_list:
+                num, name, qty = order
+                save_inventory(num, name, qty)
             break
         if prompt== "error":
             error+=1
@@ -56,7 +63,6 @@ while True:
         print("\nOrders successfully saved to orders.txt")
         current_order = [number, order_list[index], prompt]
         inventory_list.append(current_order)
-
     else:
         print("Invalid Name")
         error+=1
