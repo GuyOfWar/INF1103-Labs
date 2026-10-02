@@ -1,3 +1,4 @@
+import json
 inventory = int(0)
 taxtotal = 0.0
 error = int(0)
@@ -7,12 +8,31 @@ ProductName = 0
 order_number= ["1001", "1002", "1003", "1004"]
 order_list= ["Wireless Mouse", "Keyboard", "USB Cable", "Laptop Stand"]
 inventory_list=[]
-def load_inventory(): #load txt
-    print("\nCurrent Orders:\n")
-    with open("orders.txt", "a"): #creates new file if doesn't exist and opens & close it to make sure
+product_data = [ #dictonary of products
+    {"id":"P001", "name": "Laptop", "price": 1200.00, "stock": 15},
+    {"id":"P002", "name": "Mouse", "price": 25.50, "stock": 40},
+    {"id":"P003", "name": "Keyboard", "price": 45.00, "stock": 25},
+    {"id":"P004", "name": "Monitor", "price": 299.99, "stock": 10}
+]
+def title_display(): #print out title
+    print("========================================")
+    print("INVENTORY MANAGEMENT SYSTEM")
+    print("========================================")
+def menu_display():
+    print("------------MENU------------")
+    print("1. Display All Products")
+    print("2. Add Product")
+    print("3. Update Stock")
+    print("4. Search Product")
+    print("5. Save Inventory")
+    print("6. Exit")
+def load_inventory(): #load json
+    with open("inventory.json", "a"): #creates new file if doesn't exist and opens & close it to make sure
         pass
-    with open("orders.txt", "r") as file:
-        print(file.read())
+    print("inventory.json found.")
+    print("Inventory loaded successfully.")
+    with open("inventory.json", "r") as file:
+        print(json.load(file))
 def save_inventory(number, name, quantity): #save to txt
     with open("orders.txt", "a") as file:
         file.write(f"{number}, {name}, {quantity}\n")
@@ -35,7 +55,9 @@ def generate_report(total_units, failed_attempts): #print the final summary
     print("Number of Failed/Rejected Entries:", failed_attempts)
 
 #main
+title_display()
 load_inventory()
+menu_display()
 while True: 
     ProductName= input("Enter Product Name:").lower()
     if ProductName== "quit": #quit for ProductName
