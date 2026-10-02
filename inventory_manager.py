@@ -31,9 +31,21 @@ def load_inventory(): #load json
         pass
     print("inventory.json found.")
     print("Inventory loaded successfully.")
-    with open("inventory.json", "r") as file:
-        print(json.load(file))
-def save_inventory(number, name, quantity): #save to txt
+def display_all(): #option 1
+    print("Current Inventory")
+    print("-------------------------------------")
+    with open("inventory.json", "r") as file: #open and load json
+        inventory = json.load(file)
+    for item_id, details in inventory.items(): #loop and print
+        print(
+        f"ID: {item_id} | Name: {details['name']} | Price: ${details['price']:.2f} | Stock: {details['stock']}"
+        )
+    print("-------------------------------------")
+
+#def add_product(): #option 2
+#def update_stock(): #option 3
+#def search_product(): #option 4
+def save_inventory(number, name, quantity): #option 5, save to json
     with open("orders.txt", "a") as file:
         file.write(f"{number}, {name}, {quantity}\n")
 def get_valid_input(stock): #Handles the prompt, handles input validation, returns a valid integer or a "quit" signal
@@ -58,6 +70,7 @@ def generate_report(total_units, failed_attempts): #print the final summary
 title_display()
 load_inventory()
 menu_display()
+display_all()
 while True: 
     ProductName= input("Enter Product Name:").lower()
     if ProductName== "quit": #quit for ProductName
