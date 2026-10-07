@@ -1,13 +1,15 @@
 import json
+import os
 inventory = int(0)
 taxtotal = 0.0
 error = int(0)
 prompt = 0
 x = int(0)
 ProductName = 0
+ProductID = 0
 order_number= ["1001", "1002", "1003", "1004"]
 order_list= ["Wireless Mouse", "Keyboard", "USB Cable", "Laptop Stand"]
-inventory_list=[]
+inventory_list={}
 product_data = [ #dictonary of products
     {"id":"P001", "name": "Laptop", "price": 1200.00, "stock": 15},
     {"id":"P002", "name": "Mouse", "price": 25.50, "stock": 40},
@@ -32,21 +34,53 @@ def load_inventory(): #load json
     print("inventory.json found.")
     print("Inventory loaded successfully.")
 def display_all(): #option 1
+    global inventory_list
     print("Current Inventory")
     print("-------------------------------------")
     with open("inventory.json", "r") as file: #open and load json
-        inventory = json.load(file)
-    for item_id, details in inventory.items(): #loop and print
+        inventory_list = json.load(file) #load json file into inventory_list as dictionary
+    for item_id, details in inventory_list.items(): #loop and print
         print(
         f"ID: {item_id} | Name: {details['name']} | Price: ${details['price']:.2f} | Stock: {details['stock']}"
         )
     print("-------------------------------------")
 
-#def add_product(): #option 2
-#def update_stock(): #option 3
+def add_product(): #option 2
+    global inventory_list
+    Pid= 0
+    Pname= 0
+    Price= 0
+    Quantity= int(0)
+    print("Add New Product")
+    while True: #check for duplicate product id when adding new product
+        Pid= input("Product ID: ").capitalize()
+        if Pid in inventory_list:
+            print("Error. Product ID already exists! Choose a different Product ID.")
+        else:
+            break
+    Pname= input("Product Name: ").title()
+    Price= float(input("Price: "))
+    Quantity= int(input("Stock Quantity: "))
+    print("\nProduct added successfully!\n")
+    inventory_list[Pid]= {"name": Pname, "price": Price, "stock": Quantity}
+
+def update_stock(): #option 3
+    global inventory_list
+    print("\nUpdate Stock")
+    while True: #check if product id is in inventory_list
+        ProductID= input("Enter Product ID:").capitalize()
+        if ProductID in inventory_list: 
+            print("\nProduct Found:")
+            print(f"Name:", {inventory_list[ProductID]["name"]})
+            print(f"Current Stock: {inventory_list[ProductID]["stock"]}")
+            break
+        else:
+            print("Product ID not found.Try again")
+    inventory_list[ProductID]["stock"]= input("\nNew Stock Quantity:")
+    print("\nStock updated successfully!")
 #def search_product(): #option 4
-def save_inventory(number, name, quantity): #option 5, save to json
-    with open("orders.txt", "a") as file:
+def save_inventory(number, name, price, quantity): #option 5, save to json
+    with open("inventory.json", "a") as file:
         file.write(f"{number}, {name}, {quantity}\n")
 def get_valid_input(stock): #Handles the prompt, handles input validation, returns a valid integer or a "quit" signal
     if stock == "quit":
