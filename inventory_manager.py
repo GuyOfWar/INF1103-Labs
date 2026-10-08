@@ -99,9 +99,13 @@ def search_product(): #option 4
         else:
             print("Product ID not found. Try again.")
 
-def save_inventory(number, name, price, quantity): #option 5, save to json
-    with open("inventory.json", "a") as file:
-        file.write(f"{number}, {name}, {quantity}\n")
+def save_inventory(): #option 5, save to json and dump the dictionary into it
+    global inventory_list
+    print("\nSaving inventory...")
+    with open('inventory.json', 'w') as file:
+        json.dump(inventory_list, file, indent=4)
+    print("Inventory saved successfully to inventory.json.")
+
 def get_valid_input(stock): #Handles the prompt, handles input validation, returns a valid integer or a "quit" signal
     if stock == "quit":
         return("quit")
@@ -134,5 +138,7 @@ while True:
         update_stock()
     elif prompt== "4":
         search_product()
+    elif prompt== "5":
+        save_inventory()
     else:
         print("Invalid Option. Please key in the numbers 1-6.")
