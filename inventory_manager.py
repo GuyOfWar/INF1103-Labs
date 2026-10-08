@@ -105,7 +105,7 @@ def search_product(): #option 4
             print("-------------------------------------")
             break
         else:
-            print("Product not found.")
+            print("\nProduct not found.")
             break
 
 def save_inventory(): #option 5 & 6, save to json and dump the dictionary into it
