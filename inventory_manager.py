@@ -28,6 +28,7 @@ def menu_display():
     print("4. Search Product")
     print("5. Save Inventory")
     print("6. Exit")
+
 def load_inventory(): #load json
     global inventory_list
     # If file doesn't exist or is empty, create it with an empty dictionary {}
@@ -41,6 +42,7 @@ def load_inventory(): #load json
                 inventory_list = {}  # Fallback if the file is corrupted
     print("inventory.json found.")
     print("Inventory loaded successfully.")
+
 def display_all(): #option 1
     global inventory_list
     print("Current Inventory")
@@ -50,12 +52,9 @@ def display_all(): #option 1
         f"ID: {item_id} | Name: {details['name']} | Price: ${details['price']:.2f} | Stock: {details['stock']}"
         )
     print("-------------------------------------")
+    
 def add_product(): #option 2
     global inventory_list
-    Pid= 0
-    Pname= 0
-    Price= 0
-    Quantity= int(0)
     print("\nAdd New Product")
     while True: #check for duplicate product id when adding new product
         Pid= input("Product ID: ").capitalize()
@@ -80,10 +79,26 @@ def update_stock(): #option 3
             print(f"Current Stock: {inventory_list[ProductID]['stock']}")
             break
         else:
-            print("Product ID not found.Try again")
+            print("Product ID not found. Try again.")
     inventory_list[ProductID]["stock"]= input("\nNew Stock Quantity:")
     print("\nStock updated successfully!")
-#def search_product(): #option 4
+
+def search_product(): #option 4
+    global inventory_list
+    while True: #check if product id is in inventory_list
+        ProductID= input("Enter Product ID:").capitalize()
+        if ProductID in inventory_list: 
+            print("\nProduct Found")
+            print("-------------------------------------")
+            print("ID:", ProductID)
+            print(f"Name: {inventory_list[ProductID]['name']}")
+            print(f"Price: ${inventory_list[ProductID]['price']:.2f}")
+            print(f"Stock: {inventory_list[ProductID]['stock']}")
+            print("-------------------------------------")
+            break
+        else:
+            print("Product ID not found. Try again.")
+
 def save_inventory(number, name, price, quantity): #option 5, save to json
     with open("inventory.json", "a") as file:
         file.write(f"{number}, {name}, {quantity}\n")
@@ -117,5 +132,7 @@ while True:
        add_product()
     elif prompt== "3":
         update_stock()
+    elif prompt== "4":
+        search_product()
     else:
         print("Invalid Option. Please key in the numbers 1-6.")
