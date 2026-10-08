@@ -3,7 +3,7 @@ import os
 inventory = int(0)
 taxtotal = 0.0
 error = int(0)
-prompt = 0
+prompt = int(0)
 x = int(0)
 ProductName = 0
 ProductID = 0
@@ -29,29 +29,34 @@ def menu_display():
     print("5. Save Inventory")
     print("6. Exit")
 def load_inventory(): #load json
-    with open("inventory.json", "a"): #creates new file if doesn't exist and opens & close it to make sure
-        pass
+    global inventory_list
+    # If file doesn't exist or is empty, create it with an empty dictionary {}
+    if not os.path.exists("inventory.json") or os.path.getsize("inventory.json") == 0:
+        with open("inventory.json", "w") as file:
+            json.dump({}, file)
+    with open("inventory.json", "r") as file: #open and load json
+            try:
+                inventory_list = json.load(file) #load json file into inventory_list as dictionary
+            except json.JSONDecodeError:
+                inventory_list = {}  # Fallback if the file is corrupted
     print("inventory.json found.")
     print("Inventory loaded successfully.")
 def display_all(): #option 1
     global inventory_list
     print("Current Inventory")
     print("-------------------------------------")
-    with open("inventory.json", "r") as file: #open and load json
-        inventory_list = json.load(file) #load json file into inventory_list as dictionary
     for item_id, details in inventory_list.items(): #loop and print
         print(
         f"ID: {item_id} | Name: {details['name']} | Price: ${details['price']:.2f} | Stock: {details['stock']}"
         )
     print("-------------------------------------")
-
 def add_product(): #option 2
     global inventory_list
     Pid= 0
     Pname= 0
     Price= 0
     Quantity= int(0)
-    print("Add New Product")
+    print("\nAdd New Product")
     while True: #check for duplicate product id when adding new product
         Pid= input("Product ID: ").capitalize()
         if Pid in inventory_list:
@@ -71,8 +76,8 @@ def update_stock(): #option 3
         ProductID= input("Enter Product ID:").capitalize()
         if ProductID in inventory_list: 
             print("\nProduct Found:")
-            print(f"Name:", {inventory_list[ProductID]["name"]})
-            print(f"Current Stock: {inventory_list[ProductID]["stock"]}")
+            print(f"Name: {inventory_list[ProductID]['name']}")
+            print(f"Current Stock: {inventory_list[ProductID]['stock']}")
             break
         else:
             print("Product ID not found.Try again")
@@ -104,35 +109,13 @@ def generate_report(total_units, failed_attempts): #print the final summary
 title_display()
 load_inventory()
 menu_display()
-display_all()
 while True: 
-    ProductName= input("Enter Product Name:").lower()
-    if ProductName== "quit": #quit for ProductName
-        generate_report(inventory, error)
-        for order in inventory_list: #call function to save list into txt
-            num, name, qty = order
-            save_inventory(num, name, qty)
-        break
-    if ProductName in (item.lower() for item in order_list):
-        prompt= get_valid_input(input("Enter Quantity:"))
-        if prompt== "quit": #quit for quantity
-            generate_report(inventory, error)
-            for order in inventory_list:
-                num, name, qty = order
-                save_inventory(num, name, qty)
-            break
-        if prompt== "error":
-            error+=1
-            continue
-        inventory= process_delivery(inventory, prompt)
-        index = [item.lower() for item in order_list].index(ProductName)
-        number = order_number[index]
-        print("New Order Added:")
-        print(number, order_list[index], prompt)
-        print("\nOrders successfully saved to orders.txt")
-        current_order = [number, order_list[index], prompt]
-        inventory_list.append(current_order)
+    prompt= input("\nEnter Option:")
+    if prompt== "1":
+       display_all()
+    elif prompt== "2":
+       add_product()
+    elif prompt== "3":
+        update_stock()
     else:
-        print("Invalid Name")
-        error+=1
-        continue
+        print("Invalid Option. Please key in the numbers 1-6.")
