@@ -1,26 +1,12 @@
 import json
 import os
-inventory = int(0)
-taxtotal = 0.0
-error = int(0)
 prompt = int(0)
-x = int(0)
-ProductName = 0
-ProductID = 0
-order_number= ["1001", "1002", "1003", "1004"]
-order_list= ["Wireless Mouse", "Keyboard", "USB Cable", "Laptop Stand"]
 inventory_list={}
-product_data = [ #dictonary of products
-    {"id":"P001", "name": "Laptop", "price": 1200.00, "stock": 15},
-    {"id":"P002", "name": "Mouse", "price": 25.50, "stock": 40},
-    {"id":"P003", "name": "Keyboard", "price": 45.00, "stock": 25},
-    {"id":"P004", "name": "Monitor", "price": 299.99, "stock": 10}
-]
 def title_display(): #print out title
     print("========================================")
     print("INVENTORY MANAGEMENT SYSTEM")
     print("========================================")
-def menu_display():
+def menu_display(): #print out menu
     print("------------MENU------------")
     print("1. Display All Products")
     print("2. Add Product")
@@ -28,7 +14,6 @@ def menu_display():
     print("4. Search Product")
     print("5. Save Inventory")
     print("6. Exit")
-
 def load_inventory(): #load json
     global inventory_list
     # If file doesn't exist or is empty, create it with an empty dictionary {}
@@ -54,7 +39,6 @@ def display_all(): #option 1
     print("-------------------------------------")
     
 def add_product(): #option 2
-    global inventory_list
     print("\nAdd New Product")
     while True: #check for duplicate product id when adding new product
         Pid= input("Product ID: ").capitalize()
@@ -85,7 +69,6 @@ def add_product(): #option 2
     inventory_list[Pid]= {"name": Pname, "price": Price, "stock": Quantity}
 
 def update_stock(): #option 3
-    global inventory_list
     print("\nUpdate Stock")
     while True: #check if product id is in inventory_list
         ProductID= input("Enter Product ID:").capitalize()
@@ -109,7 +92,6 @@ def update_stock(): #option 3
     print("\nStock updated successfully!")
 
 def search_product(): #option 4
-    global inventory_list
     while True: #check if product id is in inventory_list
         ProductID= input("Enter Product ID:").capitalize()
         if ProductID in inventory_list: 
@@ -126,7 +108,6 @@ def search_product(): #option 4
             break
 
 def save_inventory(): #option 5 & 6, save to json and dump the dictionary into it
-    global inventory_list
     with open('inventory.json', 'w') as file:
         json.dump(inventory_list, file, indent=4)
 #main
