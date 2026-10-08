@@ -122,14 +122,13 @@ def search_product(): #option 4
             print("-------------------------------------")
             break
         else:
-            print("Product ID not found. Try again.")
+            print("Product not found.")
+            break
 
-def save_inventory(): #option 5, save to json and dump the dictionary into it
+def save_inventory(): #option 5 & 6, save to json and dump the dictionary into it
     global inventory_list
-    print("\nSaving inventory...")
     with open('inventory.json', 'w') as file:
         json.dump(inventory_list, file, indent=4)
-    print("Inventory saved successfully to inventory.json.")
 #main
 title_display()
 load_inventory()
@@ -145,6 +144,15 @@ while True:
     elif prompt== "4":
         search_product()
     elif prompt== "5":
+        print("\nSaving inventory...")
         save_inventory()
+        print("Inventory saved successfully to inventory.json.")
+    elif prompt== "6":
+        print("Saving Inventory before exit...")
+        save_inventory()
+        print("Inventory saved successfully.")
+        print("\nThank you for using Inventory Management System.")
+        print("Program terminated.")
+        break #exits program
     else:
         print("Invalid Option. Please key in the numbers 1-6.")
