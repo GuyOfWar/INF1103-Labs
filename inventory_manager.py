@@ -92,6 +92,7 @@ def update_stock(): #option 3
     print("\nStock updated successfully!")
 
 def search_product(): #option 4
+    print("\nSearch Product")
     while True: #check if product id is in inventory_list
         ProductID= input("Enter Product ID:").capitalize()
         if ProductID in inventory_list: 
@@ -129,7 +130,7 @@ while True:
         save_inventory()
         print("Inventory saved successfully to inventory.json.")
     elif prompt== "6":
-        print("Saving Inventory before exit...")
+        print("\nSaving Inventory before exit...")
         save_inventory()
         print("Inventory saved successfully.")
         print("\nThank you for using Inventory Management System.")
