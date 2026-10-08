@@ -7,7 +7,7 @@ def title_display(): #print out title
     print("INVENTORY MANAGEMENT SYSTEM")
     print("========================================")
 def menu_display(): #print out menu
-    print("------------MENU------------")
+    print("\n------------MENU------------")
     print("1. Display All Products")
     print("2. Add Product")
     print("3. Update Stock")
@@ -25,7 +25,7 @@ def load_inventory(): #load json
                 inventory_list = json.load(file) #load json file into inventory_list as dictionary
             except json.JSONDecodeError:
                 inventory_list = {}  # Fallback if the file is corrupted
-    print("inventory.json found.")
+    print("\ninventory.json found.")
     print("Inventory loaded successfully.")
 
 def display_all(): #option 1
