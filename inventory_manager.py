@@ -63,8 +63,24 @@ def add_product(): #option 2
         else:
             break
     Pname= input("Product Name: ").title()
-    Price= float(input("Price: "))
-    Quantity= int(input("Stock Quantity: "))
+    while True:
+        try: #converts input to float without crashing if it fails by jumping to except block
+            Price = float(input("Price: "))
+            if Price < 0:
+                print("Price cannot be negative. Please try again.")
+                continue
+            break  # Exit loop if input is valid
+        except ValueError: #when input is not numbers
+            print("Invalid input! Please enter a valid number.")
+    while True:
+        try: #converts input to int without crashing if it fails by jumping to except block
+            Quantity = int(input("Stock Quantity: "))
+            if Quantity < 0:
+                print("Stock cannot be negative. Please try again.")
+                continue
+            break  # Exit loop if input is valid
+        except ValueError: #when input is not numbers
+            print("Invalid input! Please enter a valid whole number.")
     print("\nProduct added successfully!\n")
     inventory_list[Pid]= {"name": Pname, "price": Price, "stock": Quantity}
 
@@ -80,7 +96,16 @@ def update_stock(): #option 3
             break
         else:
             print("Product ID not found. Try again.")
-    inventory_list[ProductID]["stock"]= input("\nNew Stock Quantity:")
+    while True:
+            try: #converts input to int without crashing if it fails by jumping to except block
+                stock= int(input("\nNew Stock Quantity:"))
+                if stock < 0:
+                    print("Stock cannot be negative. Please try again.")
+                    continue
+                break  # Exit loop if input is valid
+            except ValueError: #when input is not numbers
+                print("Invalid input! Please enter a valid whole number.")    
+    inventory_list[ProductID]["stock"]= stock
     print("\nStock updated successfully!")
 
 def search_product(): #option 4
@@ -105,25 +130,6 @@ def save_inventory(): #option 5, save to json and dump the dictionary into it
     with open('inventory.json', 'w') as file:
         json.dump(inventory_list, file, indent=4)
     print("Inventory saved successfully to inventory.json.")
-
-def get_valid_input(stock): #Handles the prompt, handles input validation, returns a valid integer or a "quit" signal
-    if stock == "quit":
-        return("quit")
-    if not stock.isdigit():
-        print("Error, pls use whole numbers only")
-        return("error")
-    stock = int(stock)
-    if  stock < 0:
-        print("Invalid Number, pls use whole numbers only")
-        return("error")
-    return(stock)
-def process_delivery(current_total, new_value): #Calculates the new total and returns it
-    current_total+= new_value
-    return(current_total)
-def generate_report(total_units, failed_attempts): #print the final summary
-    print("Total Number of Units Processed=", total_units)
-    print("Number of Failed/Rejected Entries:", failed_attempts)
-
 #main
 title_display()
 load_inventory()
